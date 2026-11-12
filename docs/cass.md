@@ -1,9 +1,12 @@
 # 以下均为WorkBuddy实测
+
+实测环境（2026-10 / 双十一前后）：Windows 10，本机 Google Chrome，WorkBuddy + `browser-runtime-shopping-skill`，Streamable HTTP。按题目在对应站登录后跑（淘宝 / 京东 / 拼多多登录态在本机 profile）。截图和产物为当时页面快照，价格以下单页为准。
+
 使用方法：
 已在本地部署browser-runtime-mcp并且配置到WorkBuddy连接器，在WorkBuddy使用/引用技能browser-runtime-shopping-skill 后面带自然语言描述的购物需求
 如：`/browser-runtime-shopping-skill 帮我看看这款OPPO findx10标准版 12+512g淘宝京东拼多多现在最低到手价多少(包含国补/补贴) 输出 html形式 需要我登录/配合的直接说`
 
-完整产物见 [产物文档/](产物文档/)。截图为当时快照，价格以下单页为准。
+完整产物见 [产物文档/](产物文档/)。
 
 示例：
 
