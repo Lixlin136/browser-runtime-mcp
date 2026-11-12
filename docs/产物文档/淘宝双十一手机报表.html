@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>淘宝双十一 2000-3000元 高性价比手机 明细报表</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#ffffff; --ink:#1f2329; --sub:#6b7280; --line:#e7e9ee;
+    --red:#e4393c; --blue:#2563eb; --green:#0a9d6b; --amber:#d97706; --chip:#7c3aed;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.6;}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 18px 60px;}
+  header h1{font-size:24px;margin:0 0 6px;}
+  header .meta{color:var(--sub);font-size:13px;margin-bottom:18px;}
+  .note{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:10px;
+        padding:12px 14px;font-size:13px;margin-bottom:22px;}
+  .note b{color:#7c2d12}
+  h2{font-size:18px;margin:28px 0 12px;padding-left:10px;border-left:4px solid var(--red);}
+  /* summary table */
+  table{border-collapse:collapse;width:100%;background:var(--card);border-radius:10px;overflow:hidden;
+        box-shadow:0 1px 3px rgba(0,0,0,.06);font-size:13.5px;}
+  th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  th{background:#fafbfc;color:var(--sub);font-weight:600;font-size:12.5px;white-space:nowrap;}
+  tbody tr:hover{background:#f9fbff;}
+  .tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin-left:4px;vertical-align:middle;}
+  .tag.official{background:#dcfce7;color:#15803d;}
+  .tag.third{background:#fee2e2;color:#b91c1c;}
+  .price-now{color:var(--red);font-weight:700;}
+  .price-old{color:var(--sub);text-decoration:line-through;font-size:12px;margin-left:2px;}
+  .price-guobu{color:var(--green);font-weight:600;}
+  /* phone cards */
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 18px 8px;
+         margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+  .pcard .phead{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;margin-bottom:4px;}
+  .pcard .pname{font-size:18px;font-weight:700;}
+  .pcard .chip{background:#f3e8ff;color:var(--chip);font-size:12px;padding:2px 8px;border-radius:6px;font-weight:600;}
+  .pcard .line2{color:var(--sub);font-size:13px;margin-bottom:12px;}
+  .pcard .line2 b{color:var(--ink);font-weight:600;}
+  .grid2{display:grid;grid-template-columns:1.05fr 1fr;gap:18px;}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr;}}
+  .sub-h{font-size:13px;font-weight:700;color:var(--sub);margin:4px 0 6px;}
+  .link{color:var(--blue);text-decoration:none;font-size:12.5px;}
+  .link:hover{text-decoration:underline;}
+  .spec td:first-child{color:var(--sub);width:38%;background:#fafbfc;}
+  .spec td:last-child{font-weight:500;}
+  .foot{margin-top:30px;color:var(--sub);font-size:12px;border-top:1px solid var(--line);padding-top:14px;}
+  .pill{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:6px;padding:1px 7px;font-size:11.5px;margin:2px 3px 2px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>淘宝双十一 · 2000–3000 元高性价比手机明细报表</h1>
+    <div class="meta">数据抓取：2026-10-29（双十一预热期）｜来源：淘宝商品详情页 SPA 全局对象（loaderData）+ 规格参数页（100% 结构化提取）</div>
+  </header>
+
+  <div class="note">
+    <b>价格口径说明（务必先看）：</b><br>
+    ① <b>原价</b>＝商品详情页 loaderData 中的「优惠前」标价，100% 准确。<br>
+    ② <b>国补后≈</b>＝按国家补贴标准公式自动计算：<b>原价 − min(round(原价×15%), 500)</b>（手机类封顶 500 元）。这是「若走国补」的估算到手价，<b>非页面实付</b>。<br>
+    ③ <b>页面展示价</b>＝详情页主价格（priceVO），是店铺当前实际挂价（可能是券后/国补后/起售价），以它为准看实时。<br>
+    ④ 标 <span class="tag official">官方旗舰店</span> 的店铺真实支持国补；标 <span class="tag third">第三方/专营店</span> 的（含标题写"官方旗舰店"实为专营店的）多数无国补，实际到手以页面券后价为准。<br>
+    ⑤ 双十一期间叠加跨店满减/红包/88VIP 后，到手可能再低 100–300 元。价格随时变动，最终以页面实时显示为准。
+  </div>
+
+  <h2>一、总览对比表（按性价比梯队排序）</h2>
+  <table id="summary">
+    <thead><tr>
+      <th>机型</th><th>芯片</th><th>屏幕 / 电池</th><th>起售配置</th>
+      <th>原价起</th><th>国补后≈起</th><th>页面展示价</th><th>店铺</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <h2>二、各机型明细（SKU 全价表 + 完整规格）</h2>
+  <div id="cards"></div>
+
+  <div class="foot">
+    抓取方式：登录态 → 商品详情页 → 读取 <code>window.__ICE_APP_CONTEXT__.loaderData.home.data.res</code> 拿 SKU 原价 / 店铺 / 价格视图，
+    读取 DOM <code>.paramsInfoArea</code> 拿完整规格参数（CPU、屏幕、电池、摄像头、NFC 等）。价格为各配置最低配色价，部分机型随配色有 ±50~100 浮动（真我 GT7 Pro 最明显）。
+    本报表不含下单页实付、不含追评大图；如需某机型真实评价（含差评）或 88VIP 折后测算，可进一步下钻。
+  </div>
+</div>
+
+<script>
+const PHONES = [
+  {
+    name:"真我 GT7 Pro", id:974227774611, official:false,
+    store:"智创数码优品（第三方）", headline:2218,
+    chip:"高通骁龙8 Elite（骁龙8至尊版）", tier:"性能旗舰",
+    skus:[["12GB+256GB",2218],["16GB+256GB",2268],["12GB+512GB",2568],["16GB+512GB",2668],["16GB+1TB",2798]],
+    screen:"6.78″ 120Hz AMOLED · 2780×1264", battery:"6500mAh · 120W", cam:"后：5000万主摄+5000万长焦+800万超广角 / 前：1600万",
+    specs:[["CPU型号","高通骁龙8 Elite 移动平台"],["屏幕尺寸","6.78英寸"],["屏幕刷新率","120Hz"],["分辨率","2780×1264"],
+      ["屏幕材质","AMOLED"],["电池容量","6500mAh"],["有线充电功率","120W"],["主摄像素","5000万像素"],["长焦像素","5000万像素"],
+      ["超广角像素","800万像素"],["前置摄像头像素","1600万像素"],["是否支持NFC","是"],["解锁方式","屏下指纹"],["操作系统","Android"],["上市时间","2024-11"],["机身颜色","光域白/星迹钛/火星"]]
+  },
+  {
+    name:"真我 GT8", id:1056349082877, official:false,
+    store:"华夏数码科技店（第三方）", headline:2659,
+    chip:"高通骁龙8至尊版", tier:"性能旗舰",
+    skus:[["12GB+256GB",2659],["12GB+512GB",2999],["16GB+512GB",3199],["16GB+1TB",3499]],
+    screen:"6.79″ 144Hz AMOLED · 2K 1440×3136", battery:"7000mAh · 100W", cam:"后：5000万主摄+800万超广角 / 前：1600万",
+    specs:[["CPU型号","高通骁龙8至尊版移动平台"],["屏幕尺寸","6.79英寸"],["屏幕刷新率","144Hz"],["分辨率","QHD+ 1440×3136"],
+      ["屏幕材质","AMOLED 柔性屏"],["电池容量","7000mAh"],["有线充电功率","100W"],["主摄像素","5000万"],["超广角像素","800万像素"],
+      ["前置摄像头像素","1600万像素"],["是否支持NFC","是"],["解锁方式","屏下指纹/超声波"],["操作系统","Android"],["上市时间","2025-10"],["机身颜色","怀特/格林/纳维"]]
+  },
+  {
+    name:"iQOO Neo11", id:1061294141342, official:false,
+    store:"宏域通讯（第三方）", headline:2600,
+    chip:"骁龙8至尊版", tier:"性能旗舰",
+    skus:[["12GB+256GB",2600],["12GB+512GB",2860],["16GB+256GB",2810],["16GB+512GB",3120],["16GB+1TB",3490]],
+    screen:"6.82″ 144Hz AMOLED · 2K 3168×1440", battery:"7500mAh · 100W", cam:"后：5000万主摄+800万超广角 / 前：1600万",
+    specs:[["CPU型号","骁龙8至尊版"],["屏幕尺寸","6.82英寸"],["屏幕刷新率","144Hz"],["分辨率","3168×1440"],
+      ["屏幕材质","AMOLED"],["电池容量","7500mAh"],["有线充电功率","100W"],["主摄像素","5000万"],["超广角像素","800万像素"],
+      ["前置摄像头像素","1600万像素"],["是否支持NFC","是"],["解锁方式","面部识别/超声波"],["操作系统","OriginOS"],["上市时间","2025-10"],["机身颜色","像素方橙/疾影黑/面对疾风/驰光白"]]
+  },
+  {
+    name:"REDMI K80", id:857419392448, official:false,
+    store:"同迅数码专营店（标题写官方旗舰店，实为专营店）", headline:2499,
+    chip:"骁龙8Gen3", tier:"均衡性价比",
+    skus:[["12GB+256GB",2499],["16GB+256GB",2599],["12GB+512GB",2699],["16GB+512GB",2899]],
+    screen:"6.67″ 120Hz OLED · 2K 3200×1440", battery:"6550mAh · 90W", cam:"后：5000万主摄+800万超广角 / 前：2000万",
+    specs:[["CPU型号","骁龙8Gen3"],["屏幕尺寸","6.67英寸"],["屏幕刷新率","120Hz"],["分辨率","3200×1440"],
+      ["屏幕材质","OLED"],["电池容量","6550mAh"],["有线充电功率","90W"],["主摄像素","5000万像素"],["超广角像素","800万像素"],
+      ["前置摄像头像素","2000万像素"],["是否支持NFC","是"],["解锁方式","超声波"],["操作系统","小米澎湃OS"],["上市时间","2024-11"],["机身颜色","玄夜黑/雪岩白/山峦青/汐月蓝"]]
+  },
+  {
+    name:"Redmi Note 15 Pro", id:964232422151, official:false,
+    store:"机御旗舰店（第三方）", headline:2099,
+    chip:"天玑7400-Ultra（中端）", tier:"预算实用",
+    skus:[["8GB+256GB",1649],["12GB+256GB",1899],["12GB+512GB",2099]],
+    screen:"6.83″ 120Hz AMOLED · 2772×1280", battery:"7000mAh · 45W", cam:"后：5000万主摄+800万超广角 / 前：2000万",
+    specs:[["CPU型号","天玑7400-Ultra"],["屏幕尺寸","6.83英寸"],["屏幕刷新率","120Hz"],["分辨率","2772×1280"],
+      ["屏幕材质","AMOLED"],["电池容量","7000mAh"],["有线充电功率","45W"],["主摄像素","5000万像素"],["超广角像素","800万像素"],
+      ["前置摄像头像素","2000万像素"],["是否支持NFC","是"],["解锁方式","屏下指纹"],["操作系统","小米澎湃OS"],["上市时间","2025-08"],["机身颜色","云霞紫/雪松白/子夜黑/天青蓝/车厘子红"]]
+  },
+  {
+    name:"荣耀 X80 Pro Max", id:1053118431216, official:true,
+    store:"荣耀官方旗舰店（官方）", headline:2199,
+    chip:"第五代骁龙6（入门级）", tier:"长续航/大电池",
+    skus:[["8GB+128GB",2199],["8GB+256GB",2399],["8GB+512GB",2699],["12GB+256GB",2799],["12GB+512GB",2999]],
+    screen:"6.8″ 120Hz AMOLED · 2788×1280", battery:"11000mAh · 90W", cam:"后：5000万主摄(OIS) / 前：800万",
+    specs:[["CPU型号","第五代骁龙6移动平台"],["屏幕尺寸","6.8英寸"],["屏幕刷新率","120Hz"],["分辨率","2788×1280"],
+      ["屏幕材质","AMOLED"],["电池容量","11000mAh"],["有线充电功率","90W"],["主摄像素","5000万像素（OIS）"],["前置摄像头像素","800万像素"],
+      ["是否支持NFC","是"],["解锁方式","面部识别"],["操作系统","MagicOS"],["上市时间","2026-06"],["保修期","12个月"],["机身颜色","黑/白/红/橙"]]
+  },
+  {
+    name:"iQOO Z11", id:1037738402505, official:true,
+    store:"iQOO手机官方旗舰店（官方）", headline:2699,
+    chip:"天玑8500满血版（中高端）", tier:"高刷长续航",
+    skus:[["8GB+256GB",2699],["12GB+256GB",2899],["12GB+512GB",3499]],
+    screen:"6.83″ 165Hz AMOLED · 2800×1260", battery:"9020mAh · 90W", cam:"后：5000万主摄 / 前：1600万",
+    specs:[["CPU型号","天玑8500满血版"],["屏幕尺寸","6.83英寸"],["屏幕刷新率","165Hz"],["分辨率","2800×1260"],
+      ["屏幕材质","AMOLED"],["电池容量","9020mAh"],["有线充电功率","90W"],["主摄像素","5000万"],["前置摄像头像素","1600万像素"],
+      ["是否支持NFC","是"],["解锁方式","面部识别/屏下指纹"],["操作系统","OriginOS"],["上市时间","2026-03"],["机身颜色","沧浪浮光/天光白/极夜黑"]]
+  },
+  {
+    name:"真我 Neo7 Turbo", id:1055301215167, official:false,
+    store:"华夏数码科技店（第三方）", headline:2199,
+    chip:"天玑9400e", tier:"性能性价比",
+    skus:[["12GB+256GB",1959],["16GB+256GB",2099],["12GB+512GB",2199],["16GB+512GB",2299]],
+    screen:"6.8″ 144Hz AMOLED · 1280×2800", battery:"7200mAh · 100W", cam:"后：5000万主摄+800万超广角 / 前：1600万",
+    specs:[["CPU型号","天玑9400e"],["屏幕尺寸","6.8英寸"],["屏幕刷新率","144Hz"],["分辨率","FHD+ 1280×2800"],
+      ["屏幕材质","AMOLED"],["电池容量","7200mAh"],["有线充电功率","100W"],["主摄像素","5000万"],["超广角像素","800万像素"],
+      ["前置摄像头像素","1600万像素"],["是否支持NFC","是"],["解锁方式","屏下指纹"],["操作系统","Android"],["上市时间","2025-05"],["机身颜色","透明灰/透明黑"]]
+  }
+];
+
+const guobu = o => o - Math.min(Math.round(o*0.15), 500);
+const link = id => "https://item.taobao.com/item.htm?id="+id;
+const fmt = n => "¥"+n.toLocaleString("zh-CN");
+
+// ---- summary table ----
+const sbody = document.querySelector("#summary tbody");
+PHONES.forEach(p=>{
+  const minOrig = Math.min(...p.skus.map(s=>s[1]));
+  const minCfg = p.skus.find(s=>s[1]===minOrig)[0];
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td><b>${p.name}</b><br><span class="pill">${p.tier}</span></td>
+    <td>${p.chip}</td>
+    <td>${p.screen}<br>${p.battery}</td>
+    <td>${minCfg}</td>
+    <td class="price-now">${fmt(minOrig)}</td>
+    <td class="price-guobu">${fmt(guobu(minOrig))}</td>
+    <td>${fmt(p.headline)}</td>
+    <td>${p.official?'<span class="tag official">官方旗舰店</span><br>':'<span class="tag third">第三方/专营店</span><br>'}${p.store}</td>`;
+  sbody.appendChild(tr);
+});
+
+// ---- detail cards ----
+const box = document.getElementById("cards");
+PHONES.forEach(p=>{
+  const skuRows = p.skus.map(s=>`<tr><td>${s[0]}</td><td class="price-now">${fmt(s[1])}</td><td class="price-guobu">${fmt(guobu(s[1]))}</td></tr>`).join("");
+  const specRows = p.specs.map(s=>`<tr><td>${s[0]}</td><td>${s[1]}</td></tr>`).join("");
+  const card = document.createElement("div");
+  card.className = "pcard";
+  card.innerHTML = `
+    <div class="phead">
+      <span class="pname">${p.name}</span>
+      <span class="chip">${p.chip}</span>
+      ${p.official?'<span class="tag official">官方旗舰店</span>':'<span class="tag third">第三方/专营店</span>'}
+      <span class="pill">${p.tier}</span>
+    </div>
+    <div class="line2">屏幕：<b>${p.screen}</b> ｜ 电池：<b>${p.battery}</b> ｜ 影像：<b>${p.cam}</b></div>
+    <div class="grid2">
+      <div>
+        <div class="sub-h">SKU 全价表（原价 / 国补后≈）</div>
+        <table>
+          <thead><tr><th>配置</th><th>原价</th><th>国补后≈</th></tr></thead>
+          <tbody>${skuRows}</tbody>
+        </table>
+        <div style="margin-top:8px">页面展示价：<span class="price-now">${fmt(p.headline)}</span>（${p.store}）</div>
+        <div><a class="link" href="${link(p.id)}" target="_blank">查看商品详情页 ↗</a></div>
+      </div>
+      <div>
+        <div class="sub-h">完整规格参数</div>
+        <table class="spec">
+          <tbody>${specRows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  box.appendChild(card);
+});
+</script>
+</body>
+</html>
